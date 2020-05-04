@@ -22,7 +22,7 @@ const limiter = rateLimit({
 
 // mongoose connection
 mongoose.connect('mongodb://localhost:27017/newsdb', mongoConfig)
-  .then(() => console.log('mongoose is running'))
+  .then(() => console.log('Connect to database'))
   .catch((err) => console.log(err.message));
 
 // app additional middlewares usage

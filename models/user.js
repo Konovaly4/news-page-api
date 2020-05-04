@@ -12,12 +12,12 @@ const userSchema = new mongoose.Schema({
     },
     minlength: 2,
     maxlength: 30,
-    required: [true, 'name required'],
+    required: [true],
   },
   email: {
     type: String,
-    unique: [true, 'this email is already exists'],
-    required: [true, 'email required'],
+    unique: [true],
+    required: [true],
     validate: {
       validator: (v) => checkValidity.isEmail(v),
       message: 'email format is incorrect',
@@ -25,7 +25,7 @@ const userSchema = new mongoose.Schema({
   },
   password: {
     type: String,
-    required: [true, 'password required'],
+    required: [true],
     minlength: 5,
     select: false,
   },

@@ -1,6 +1,6 @@
 const router = require('express').Router();
 const { celebrate, Joi } = require('celebrate');
-const { getUser, updateUser } = require('../controllers/users');
+const { getUser, updateUser, logout } = require('../controllers/users');
 
 router.get('/me', getUser);
 
@@ -11,5 +11,7 @@ router.patch('/me', celebrate({
   }),
 }),
 updateUser);
+
+router.post('/me/signout', logout);
 
 module.exports = router;
