@@ -26,17 +26,21 @@ module.exports.addArticle = (req, res, next) => {
     });
 };
 
+module.exports.checkOwner = (req, res, next) => {
+  Article.findById(req.params.id).orFail(new NotFoundErr('Article to remove not found'))
+    .populate('owner')
+    .then((article) => {
+      if (article.owner.id !== req.user._id) {
+        throw new ForbiddenErr('You can not remove this article');
+      }
+      next();
+    })
+    .catch(next);
+};
+
 module.exports.removeArticle = (req, res, next) => {
   Article.findByIdAndRemove(req.params.id)
     .populate('owner')
-    .then((article) => {
-      if (!article) {
-        return Promise.reject(new NotFoundErr('Article to remove not found'));
-      }
-      if (article.owner._id !== req.user._id) {
-        return Promise.reject(new ForbiddenErr('You can not remove this article'));
-      }
-      res.status(200).send({ data: article });
-    })
+    .then((article) => res.status(200).send({ data: article }))
     .catch(next);
 };

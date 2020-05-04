@@ -1,6 +1,8 @@
 const router = require('express').Router();
 const { celebrate, Joi } = require('celebrate');
-const { getArticles, addArticle, removeArticle } = require('../controllers/articles');
+const {
+  getArticles, addArticle, checkOwner, removeArticle,
+} = require('../controllers/articles');
 
 router.get('/', getArticles);
 
@@ -22,6 +24,6 @@ router.delete('/:id', celebrate({
     id: Joi.string().required().token().min(24),
   }).unknown(true),
 }),
-removeArticle);
+checkOwner, removeArticle);
 
 module.exports = router;
