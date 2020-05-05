@@ -3,22 +3,15 @@ const mongoose = require('mongoose');
 const helmet = require('helmet');
 const bodyParser = require('body-parser');
 const cookieParser = require('cookie-parser');
-const rateLimit = require('express-rate-limit');
 const { celebrate, Joi } = require('celebrate');
 const { errors } = require('celebrate');
 const { requestLogger, errorLogger } = require('./middlewares/logger');
-const { PORT, mongoConfig } = require('./config');
+const { PORT, mongoConfig, limiter } = require('./constants/config');
 
 const users = require('./controllers/users');
 const auth = require('./middlewares/auth');
 
 const app = express();
-
-// request limiter
-const limiter = rateLimit({
-  windowMs: 15 * 60 * 1000,
-  max: 100,
-});
 
 // mongoose connection
 mongoose.connect('mongodb://localhost:27017/newsdb', mongoConfig)

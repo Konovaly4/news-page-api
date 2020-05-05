@@ -4,7 +4,8 @@ const User = require('../models/user');
 const ConflictErr = require('../errors/conflictErr');
 const BadRequestErr = require('../errors/badRequestErr');
 
-const { JWT_SECRET } = require('../config');
+const { JWT_SECRET } = require('../constants/config');
+const { errMessages } = require('../constants/errTextLib');
 
 module.exports.getUser = (req, res, next) => {
   User.findById(req.user._id)
@@ -34,7 +35,7 @@ module.exports.addUser = (req, res, next) => {
     })
     .catch((err) => {
       if (err.message.includes('duplicate key error') && err.message.includes('email')) {
-        return next(new ConflictErr('Email is already exists'));
+        return next(new ConflictErr(errMessages.existingEmail));
       }
       if (err.message.includes('user validation failed')) {
         return next(new BadRequestErr(err.message));
@@ -44,8 +45,8 @@ module.exports.addUser = (req, res, next) => {
 };
 
 module.exports.updateUser = (req, res, next) => {
-  const { name, email } = req.body;
-  User.findByIdAndUpdate(req.user._id, { name, email }, {
+  const { name } = req.body;
+  User.findByIdAndUpdate(req.user._id, { name }, {
     new: true,
     runValidators: true,
     upsert: false,
@@ -56,7 +57,12 @@ module.exports.updateUser = (req, res, next) => {
         email: user.email,
       });
     })
-    .catch(next);
+    .catch((err) => {
+      if (err.message.includes('Validation failed')) {
+        return next(new BadRequestErr(err.message));
+      }
+      next(err);
+    });
 };
 
 module.exports.login = (req, res, next) => {

@@ -2,9 +2,10 @@ const Article = require('../models/article');
 const NotFoundErr = require('../errors/notFoundErr');
 const BadRequestErr = require('../errors/badRequestErr');
 const ForbiddenErr = require('../errors/forbiddenErr');
+const { errMessages } = require('../constants/errTextLib');
 
 module.exports.getArticles = (req, res, next) => {
-  Article.find({ owner: req.user._id }).orFail(new NotFoundErr('there is no articles'))
+  Article.find({ owner: req.user._id }).orFail(new NotFoundErr(errMessages.noArticles))
     .populate('owner')
     .then((articles) => res.status(200).send({ data: articles }))
     .catch(next);
@@ -27,11 +28,11 @@ module.exports.addArticle = (req, res, next) => {
 };
 
 module.exports.checkOwner = (req, res, next) => {
-  Article.findById(req.params.id).orFail(new NotFoundErr('Article to remove not found'))
+  Article.findById(req.params.id).orFail(new NotFoundErr(errMessages.noArticleToRemove))
     .populate('owner')
     .then((article) => {
       if (article.owner.id !== req.user._id) {
-        throw new ForbiddenErr('You can not remove this article');
+        throw new ForbiddenErr(errMessages.cantRemoveArticle);
       }
       next();
     })
