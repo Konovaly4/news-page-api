@@ -136,7 +136,6 @@ Note: All functions below avaliable after logging in and receiving the token.
 * URL: [http://api.news-page.gq/users/me/signout]
 * URL params: none
 * Data params: none
-```
 * Response: none
 * Errors: error with actual status and message
 
