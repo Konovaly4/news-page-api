@@ -5,7 +5,8 @@
     "consistent-return": "off",
     "arrow-body-style": "off",
     "no-console": "off",
-    "func-names": ["error", "never"]
+    "func-names": ["error", "never"],
+    "no-unused-vars": ["error", {"args": "none"}]
   }
 }
 

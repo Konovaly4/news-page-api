@@ -3,13 +3,11 @@ const mongoose = require('mongoose');
 const helmet = require('helmet');
 const bodyParser = require('body-parser');
 const cookieParser = require('cookie-parser');
-const { celebrate, Joi } = require('celebrate');
 const { errors } = require('celebrate');
 const { requestLogger, errorLogger } = require('./middlewares/logger');
 const { PORT, mongoConfig, limiter } = require('./constants/config');
 
-const users = require('./controllers/users');
-const auth = require('./middlewares/auth');
+const errMiddleware = require('./errors/finalErrMidlleware');
 
 const app = express();
 
@@ -35,31 +33,8 @@ app.get('/crash-test', () => {
   }, 0);
 });
 
-// request signup routing
-app.post('/signin', celebrate({
-  body: Joi.object().keys({
-    email: Joi.string().required().email(),
-    password: Joi.string().required().min(5),
-  }),
-}),
-users.login);
 
-// request signin routing
-app.post('/signup', celebrate({
-  body: Joi.object().keys({
-    name: Joi.string().required().min(2).max(30),
-    email: Joi.string().required().email(),
-    password: Joi.string().required().min(5),
-  }),
-}),
-users.addUser);
-
-// users/cards/other requests routing
-app.use('/users', auth, require('./routes/users'));
-
-app.use('/articles', auth, require('./routes/articles'));
-
-app.use('/', require('./routes/otherReq'));
+app.use('/', require('./routes/index'));
 
 // error logger
 app.use(errorLogger);
@@ -70,13 +45,7 @@ app.use(errors());
 
 // final error middleware
 // eslint-disable-next-line no-unused-vars
-app.use((err, req, res, next) => {
-  const { statusCode = 500 } = err;
-  res.status(statusCode)
-    .send({
-      message: err.message,
-    });
-});
+app.use(errMiddleware);
 
 // port listening
 app.listen(PORT);
