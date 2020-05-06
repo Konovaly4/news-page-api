@@ -1,7 +1,7 @@
 const Article = require('../models/article');
 const NotFoundErr = require('../errors/notFoundErr');
-const BadRequestErr = require('../errors/badRequestErr');
 const ForbiddenErr = require('../errors/forbiddenErr');
+const customErr = require('../errors/customErr');
 const { errMessages } = require('../constants/errTextLib');
 
 module.exports.getArticles = (req, res, next) => {
@@ -19,12 +19,7 @@ module.exports.addArticle = (req, res, next) => {
     keyword, title, text, date, source, link, image, owner: req.user._id,
   })
     .then((article) => res.status(201).send({ data: article }))
-    .catch((err) => {
-      if (err.message.includes('article validation failed')) {
-        return next(new BadRequestErr(err.message));
-      }
-      next(err);
-    });
+    .catch((err) => customErr(err, next));
 };
 
 module.exports.checkOwner = (req, res, next) => {

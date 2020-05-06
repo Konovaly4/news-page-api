@@ -1,11 +1,9 @@
 const bcrypt = require('bcryptjs');
 const jwt = require('jsonwebtoken');
 const User = require('../models/user');
-const ConflictErr = require('../errors/conflictErr');
-const BadRequestErr = require('../errors/badRequestErr');
+const customErr = require('../errors/customErr');
 
 const { JWT_SECRET } = require('../constants/config');
-const { errMessages } = require('../constants/errTextLib');
 
 module.exports.getUser = (req, res, next) => {
   User.findById(req.user._id)
@@ -33,15 +31,7 @@ module.exports.addUser = (req, res, next) => {
           });
         });
     })
-    .catch((err) => {
-      if (err.message.includes('duplicate key error') && err.message.includes('email')) {
-        return next(new ConflictErr(errMessages.existingEmail));
-      }
-      if (err.message.includes('user validation failed')) {
-        return next(new BadRequestErr(err.message));
-      }
-      next(err);
-    });
+    .catch((err) => customErr(err, next));
 };
 
 module.exports.updateUser = (req, res, next) => {
@@ -57,12 +47,7 @@ module.exports.updateUser = (req, res, next) => {
         email: user.email,
       });
     })
-    .catch((err) => {
-      if (err.message.includes('Validation failed')) {
-        return next(new BadRequestErr(err.message));
-      }
-      next(err);
-    });
+    .catch((err) => customErr(err, next));
 };
 
 module.exports.login = (req, res, next) => {
@@ -76,7 +61,7 @@ module.exports.login = (req, res, next) => {
       })
         .end();
     })
-    .catch(next);
+    .catch((err) => customErr(err, next));
 };
 
 module.exports.logout = (req, res, next) => {

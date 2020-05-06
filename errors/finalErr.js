@@ -4,4 +4,5 @@ module.exports = (err, req, res, next) => {
     .send({
       message: err.message,
     });
+  next();
 };
