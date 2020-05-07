@@ -4,6 +4,8 @@ Backend part of Newspage project
 # Место (backend at local "express" server)
 Yandex Praktikum Newspage project (diploma work) by Max Konovalov
 
+v0.0.2 - Bug fixed and recommendations improved
+
 v0.0.1 - First edition
 
 ## About
