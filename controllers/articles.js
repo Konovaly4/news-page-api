@@ -31,7 +31,7 @@ module.exports.checkOwner = (req, res, next) => {
       }
       next();
     })
-    .catch(next);
+    .catch((err) => customErr(err, next));
 };
 
 module.exports.removeArticle = (req, res, next) => {

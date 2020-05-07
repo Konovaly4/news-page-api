@@ -6,5 +6,27 @@ const errMessages = {
   unauthorized: 'Wrong email or password',
 };
 
+const articleMessages = {
+  keyword: 'Keyword required',
+  title: 'Title required',
+  text: 'Text required',
+  date: 'Date required',
+  source: 'Source required',
+  arctile: 'Article link required',
+  image: 'Image link required',
+  articleLinkIncorrect: 'Article link is incorrect',
+  imageLinkIncorrect: 'Article link is incorrect',
+};
 
-module.exports = { errMessages };
+const userMessages = {
+  nameIncorrect: 'name format is incorrect',
+  emailIncorrect: 'email format is incorrect',
+};
+
+const authMessages = {
+  authRequired: 'authorization required',
+};
+
+module.exports = {
+  errMessages, articleMessages, userMessages, authMessages,
+};

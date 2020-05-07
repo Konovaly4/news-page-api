@@ -5,14 +5,16 @@ const bodyParser = require('body-parser');
 const cookieParser = require('cookie-parser');
 const { errors } = require('celebrate');
 const { requestLogger, errorLogger } = require('./middlewares/logger');
-const { PORT, mongoConfig, limiter } = require('./constants/config');
+const {
+  PORT, SERVERADRESS, mongoConfig, limiter,
+} = require('./constants/config');
 
 const finalErr = require('./errors/finalErr');
 
 const app = express();
 
 // mongoose connection
-mongoose.connect('mongodb://localhost:27017/newsdb', mongoConfig);
+mongoose.connect(`mongodb://${SERVERADRESS}:27017/newsdb`, mongoConfig);
 
 // app additional middlewares usage
 app.use(limiter);

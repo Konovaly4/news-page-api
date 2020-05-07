@@ -31,6 +31,6 @@ router.use('/users', auth, routUsers);
 
 router.use('/articles', auth, routArticles);
 
-router.use('/', routOther);
+router.use('*', routOther);
 
 module.exports = router;

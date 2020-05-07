@@ -1,53 +1,54 @@
 const mongoose = require('mongoose');
 const checkValidity = require('validator');
+const { articleMessages } = require('../constants/errTextLib');
 
 const articleSchema = new mongoose.Schema({
   keyword: {
     type: String,
     minlength: 2,
-    required: [true, 'Keyword required'],
+    required: [true, articleMessages.keyword],
   },
 
   title: {
     type: String,
     minlength: 2,
-    required: [true, 'Title required'],
+    required: [true, articleMessages.title],
   },
 
   text: {
     type: String,
     minlength: 2,
-    required: [true, 'Text required'],
+    required: [true, articleMessages.text],
   },
 
   date: {
     type: String,
     minlength: 2,
-    required: [true, 'Date required'],
+    required: [true, articleMessages.date],
   },
 
   source: {
     type: String,
     minlength: 2,
-    required: [true, 'Source required'],
+    required: [true, articleMessages.source],
   },
 
   link: {
     type: String,
     validate: {
       validator: (v) => checkValidity.isURL(v),
-      message: 'Article link is incorrect',
+      message: articleMessages.articleLinkIncorrect,
     },
-    required: [true, 'Article link required'],
+    required: [true, articleMessages.article],
   },
 
   image: {
     type: String,
     validate: {
       validator: (v) => checkValidity.isURL(v),
-      message: 'Image link is incorrect',
+      message: articleMessages.imageLinkIncorrect,
     },
-    required: [true, 'Image link required'],
+    required: [true, articleMessages.image],
   },
 
   owner: {

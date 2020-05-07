@@ -2,14 +2,14 @@ const mongoose = require('mongoose');
 const bcrypt = require('bcryptjs');
 const checkValidity = require('validator');
 const UnauthorizedErr = require('../errors/unauthorizedErr');
-const { errMessages } = require('../constants/errTextLib');
+const { errMessages, userMessages } = require('../constants/errTextLib');
 
 const userSchema = new mongoose.Schema({
   name: {
     type: String,
     validate: {
       validator: (v) => checkValidity.matches(v, /[a-zа-яё0-9\s]+/gi),
-      message: 'name format is incorrect',
+      message: userMessages.nameIncorrect,
     },
     minlength: 2,
     maxlength: 30,
@@ -21,7 +21,7 @@ const userSchema = new mongoose.Schema({
     required: [true],
     validate: {
       validator: (v) => checkValidity.isEmail(v),
-      message: 'email format is incorrect',
+      message: userMessages.emailIncorrect,
     },
   },
   password: {

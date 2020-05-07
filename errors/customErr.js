@@ -15,5 +15,8 @@ module.exports = (err, next) => {
   if (err.message.includes('article validation failed')) {
     return next(new BadRequestErr(err.message));
   }
+  if (err.message.includes('Cast to ObjectId failed')) {
+    return next(new BadRequestErr(err.message));
+  }
   return next(err);
 };

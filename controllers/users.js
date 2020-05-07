@@ -19,19 +19,17 @@ module.exports.addUser = (req, res, next) => {
     name, email, password,
   } = req.body;
   bcrypt.hash(password, 10)
-    .then((hash) => {
-      return User.create({
-        name, email, password: hash,
-      })
-        .then((user) => {
-          res.status(201).send({
-            _id: user._id,
-            name: user.name,
-            email: user.email,
-          });
-        });
+    .then((hash) => User.create({
+      name, email, password: hash,
     })
-    .catch((err) => customErr(err, next));
+      .then((user) => {
+        res.status(201).send({
+          _id: user._id,
+          name: user.name,
+          email: user.email,
+        });
+      })
+      .catch((err) => customErr(err, next)));
 };
 
 module.exports.updateUser = (req, res, next) => {
@@ -64,13 +62,11 @@ module.exports.login = (req, res, next) => {
     .catch((err) => customErr(err, next));
 };
 
-module.exports.logout = (req, res, next) => {
-  return User.findById(req.user._id)
-    .then(() => {
-      res.clearCookie('jwt', {
-        httpOnly: true,
-      })
-        .end();
+module.exports.logout = (req, res, next) => User.findById(req.user._id)
+  .then(() => {
+    res.clearCookie('jwt', {
+      httpOnly: true,
     })
-    .catch(next);
-};
+      .end();
+  })
+  .catch(next);
