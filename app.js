@@ -22,8 +22,9 @@ mongoose.connect(`mongodb://${SERVERADRESS}:27017/newsdb`, mongoConfig);
 app.use(limiter);
 app.use(helmet());
 app.use(cors({
-  origin: ['https://news-page.gq', 'http://news-page.gq', 'localhost:8080'],
+  origin: 'https://news-page.gq',
   credentials: true,
+  optionsSuccessStatus: 200,
 }));
 app.use(cookieParser());
 app.use(bodyParser.json());
