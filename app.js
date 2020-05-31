@@ -21,7 +21,7 @@ const corsOptions = {
     'http://localhost:8080',
     'https://konovaly4.github.io/news-page-frontend.github.io',
   ],
-  credentials: true,
+  credentials: false,
 };
 
 const app = express();
