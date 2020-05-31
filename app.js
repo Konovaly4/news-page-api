@@ -3,12 +3,13 @@ const mongoose = require('mongoose');
 const helmet = require('helmet');
 const bodyParser = require('body-parser');
 const cookieParser = require('cookie-parser');
+const cors = require('cors');
 const { errors } = require('celebrate');
 const { requestLogger, errorLogger } = require('./middlewares/logger');
 const {
   PORT, SERVERADRESS, mongoConfig, limiter,
 } = require('./constants/config');
-const allowedCors = require('./constants/allowedCors');
+// const allowedCors = require('./constants/allowedCors');
 
 const finalErr = require('./errors/finalErr');
 
@@ -20,6 +21,10 @@ mongoose.connect(`mongodb://${SERVERADRESS}:27017/newsdb`, mongoConfig);
 // app additional middlewares usage
 app.use(limiter);
 app.use(helmet());
+app.use(cors({
+  origin: ['https://news-page.gq', 'http://news-page.gq', 'localhost:8080'],
+  credentials: true,
+}));
 app.use(cookieParser());
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
@@ -35,14 +40,14 @@ app.get('/crash-test', () => {
 });
 
 
-app.use((req, res, next) => {
+/* app.use((req, res, next) => {
   const { origin } = req.headers;
   if (allowedCors.includes(origin)) {
     res.header('Access-Control-Allow-Origin', origin);
     res.header('Access-Control-Allow-Methods', 'GET,HEAD,PUT,PATCH,POST,DELETE');
   }
   next();
-});
+}); */
 
 
 app.use('/', require('./routes/index'));
