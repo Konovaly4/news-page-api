@@ -19,13 +19,19 @@ const app = express();
 mongoose.connect(`mongodb://${SERVERADRESS}:27017/newsdb`, mongoConfig);
 
 // app additional middlewares usage
+app.use(cors(({
+  origin: [
+    'https://news-page.gq',
+    'http://news-page.gq',
+    'https://localhost:8080',
+    'http://localhost:8080',
+    'https://konovaly4.github.io/news-page-frontend.github.io',
+  ],
+  credentials: true,
+  methods: 'GET,HEAD,PUT,PATCH,POST,DELETE',
+})));
 app.use(limiter);
 app.use(helmet());
-app.use(cors(({
-  origin: ['https://news-page.gq', 'http://news-page.gq', 'https://localhost:8080', 'http://localhost:8080', 'https://konovaly4.github.io/news-page-frontend.github.io'],
-  credentials: true,
-  optionsSuccessStatus: 200,
-})));
 app.use(cookieParser());
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
@@ -39,17 +45,6 @@ app.get('/crash-test', () => {
     throw new Error('Сервер сейчас упадёт');
   }, 0);
 });
-
-
-/* app.use((req, res, next) => {
-  const { origin } = req.headers;
-  if (allowedCors.includes(origin)) {
-    res.header('Access-Control-Allow-Origin', origin);
-    res.header('Access-Control-Allow-Methods', 'GET,HEAD,PUT,PATCH,POST,DELETE');
-  }
-  next();
-}); */
-
 
 app.use('/', require('./routes/index'));
 
