@@ -9,22 +9,8 @@ const { requestLogger, errorLogger } = require('./middlewares/logger');
 const {
   PORT, SERVERADRESS, mongoConfig, limiter,
 } = require('./constants/config');
-// const allowedCors = require('./constants/allowedCors');
 
 const finalErr = require('./errors/finalErr');
-
-const corsOptions = {
-  origin: [
-    'https://news-page.gq',
-    'http://news-page.gq',
-    'https://localhost:8080',
-    'http://localhost:8080',
-    'https://konovaly4.github.io/news-page-frontend.github.io',
-  ],
-  credentials: true,
-  preflightContinue: false,
-  optionsSuccessStatus: 200,
-};
 
 const app = express();
 
@@ -32,11 +18,17 @@ const app = express();
 mongoose.connect(`mongodb://${SERVERADRESS}:27017/newsdb`, mongoConfig);
 
 // app additional middlewares usage
-app.use(cors({ corsOptions }));
-/* app.use((req, res, next) => {
-  console.log(res.headers);
-  next();
-}); */
+app.use(cors(({
+  origin: [
+    'https://news-page.gq',
+    'http://news-page.gq',
+    'https://localhost:8080',
+    'http://localhost:8080',
+    'https://konovaly4.github.io/news-page-frontend.github.io',
+  ],
+  methods: 'GET,HEAD,PUT,PATCH,POST,DELETE',
+  credentials: true,
+})));
 app.use(limiter);
 app.use(helmet());
 app.use(cookieParser());
