@@ -8,6 +8,7 @@ const { requestLogger, errorLogger } = require('./middlewares/logger');
 const {
   PORT, SERVERADRESS, mongoConfig, limiter,
 } = require('./constants/config');
+const allowedCors = require('./constants/allowedCors');
 
 const finalErr = require('./errors/finalErr');
 
@@ -31,6 +32,16 @@ app.get('/crash-test', () => {
   setTimeout(() => {
     throw new Error('Сервер сейчас упадёт');
   }, 0);
+});
+
+
+app.use((req, res, next) => {
+  const { origin } = req.headers;
+  if (allowedCors.includes(origin)) {
+    res.header('Access-Control-Allow-Origin', origin);
+    res.header('Access-Control-Allow-Methods', 'GET,HEAD,PUT,PATCH,POST,DELETE');
+  }
+  next();
 });
 
 
