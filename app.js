@@ -21,11 +21,11 @@ mongoose.connect(`mongodb://${SERVERADRESS}:27017/newsdb`, mongoConfig);
 // app additional middlewares usage
 app.use(limiter);
 app.use(helmet());
-app.use(cors({
-  origin: 'http://news-page.gq',
+app.use(cors(({
+  origin: ['https://news-page.gq', 'http://news-page.gq', 'https://localhost:8080', 'http://localhost:8080', 'https://konovaly4.github.io/news-page-frontend.github.io'],
   credentials: true,
   optionsSuccessStatus: 200,
-}));
+})));
 app.use(cookieParser());
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
