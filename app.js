@@ -3,7 +3,7 @@ const mongoose = require('mongoose');
 const helmet = require('helmet');
 const bodyParser = require('body-parser');
 const cookieParser = require('cookie-parser');
-// const cors = require('cors');
+const cors = require('cors');
 const { errors } = require('celebrate');
 const { requestLogger, errorLogger } = require('./middlewares/logger');
 const {
@@ -13,13 +13,13 @@ const {
 
 const finalErr = require('./errors/finalErr');
 
-const corsOptions = [
+/* const corsOptions = [
   'https://news-page.gq',
   'http://news-page.gq',
   'https://localhost:8080',
   'http://localhost:8080',
   'https://konovaly4.github.io/news-page-frontend.github.io',
-];
+]; */
 
 const app = express();
 
@@ -27,12 +27,7 @@ const app = express();
 mongoose.connect(`mongodb://${SERVERADRESS}:27017/newsdb`, mongoConfig);
 
 // app additional middlewares usage
-app.use((req, res, next) => {
-  res.header('Access-Control-Allow-Origin', 'https://news-page.gq');
-  res.header('Access-Control-Allow-Headers', 'Origin, X-Requested-With, Content-Type, Accept');
-  res.header('Access-Control-Allow-Methods', 'GET,HEAD,PUT,PATCH,POST,DELETE');
-  next();
-});
+app.use(cors());
 app.use(limiter);
 app.use(helmet());
 app.use(cookieParser());
