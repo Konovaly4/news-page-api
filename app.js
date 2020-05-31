@@ -32,7 +32,7 @@ const app = express();
 mongoose.connect(`mongodb://${SERVERADRESS}:27017/newsdb`, mongoConfig);
 
 // app additional middlewares usage
-app.use(cors(corsOptions));
+app.use(cors({ corsOptions }));
 /* app.use((req, res, next) => {
   console.log(res.headers);
   next();
