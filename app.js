@@ -13,13 +13,7 @@ const {
 
 const finalErr = require('./errors/finalErr');
 
-const app = express();
-
-// mongoose connection
-mongoose.connect(`mongodb://${SERVERADRESS}:27017/newsdb`, mongoConfig);
-
-// app additional middlewares usage
-app.use(cors(({
+const corsOptions = {
   origin: [
     'https://news-page.gq',
     'http://news-page.gq',
@@ -28,8 +22,15 @@ app.use(cors(({
     'https://konovaly4.github.io/news-page-frontend.github.io',
   ],
   credentials: true,
-  methods: 'GET,HEAD,PUT,PATCH,POST,DELETE',
-})));
+};
+
+const app = express();
+
+// mongoose connection
+mongoose.connect(`mongodb://${SERVERADRESS}:27017/newsdb`, mongoConfig);
+
+// app additional middlewares usage
+app.use(cors(corsOptions));
 app.use(limiter);
 app.use(helmet());
 app.use(cookieParser());
