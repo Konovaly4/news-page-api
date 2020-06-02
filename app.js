@@ -18,7 +18,7 @@ const app = express();
 mongoose.connect(`mongodb://${SERVERADRESS}:27017/newsdb`, mongoConfig);
 
 // app additional middlewares usage
-app.use(cors(({
+/* app.use(cors(({
   origin: [
     'https://news-page.gq',
     'http://news-page.gq',
@@ -28,7 +28,18 @@ app.use(cors(({
   ],
   methods: 'GET,HEAD,PUT,PATCH,POST,DELETE',
   credentials: true,
-})));
+}))); */
+
+const whitelist = ['http://localhost:8080', 'http://news-page.gq', 'https://news-page.gq'];
+const corsOptions = {
+  credentials: true,
+  origin: whitelist,
+};
+app.options('*', cors(corsOptions), (req, res) => {
+  res.status(200).send('OK');
+});
+app.use(cors(corsOptions));
+
 app.use(limiter);
 app.use(helmet());
 app.use(cookieParser());
