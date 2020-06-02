@@ -11,7 +11,10 @@ module.exports.getUser = (req, res, next) => {
       name: user.name,
       email: user.email,
     }))
-    .catch(next);
+    .catch((err) => {
+      res.clearCookie('jwt');
+      next(err);
+    });
 };
 
 module.exports.addUser = (req, res, next) => {
@@ -23,13 +26,17 @@ module.exports.addUser = (req, res, next) => {
       name, email, password: hash,
     })
       .then((user) => {
+        res.clearCookie('jwt');
         res.status(201).send({
           _id: user._id,
           name: user.name,
           email: user.email,
         });
       })
-      .catch((err) => customErr(err, next)));
+      .catch((err) => {
+        res.clearCookie('jwt');
+        customErr(err, next);
+      }));
 };
 
 module.exports.updateUser = (req, res, next) => {
@@ -56,17 +63,18 @@ module.exports.login = (req, res, next) => {
       res.cookie('jwt', token, {
         maxAge: 3600000,
         httpOnly: true,
-      })
-        .end();
+      }).send({ message: 'logged in' });
     })
-    .catch((err) => customErr(err, next));
+    .catch((err) => {
+      res.clearCookie('jwt');
+      customErr(err, next);
+    });
 };
 
 module.exports.logout = (req, res, next) => User.findById(req.user._id)
   .then(() => {
     res.clearCookie('jwt', {
       httpOnly: true,
-    })
-      .end();
+    }).send({ message: 'logged out' });
   })
   .catch(next);
