@@ -17,19 +17,7 @@ const app = express();
 // mongoose connection
 mongoose.connect(`mongodb://${SERVERADRESS}:27017/newsdb`, mongoConfig);
 
-// app additional middlewares usage
-/* app.use(cors(({
-  origin: [
-    'https://news-page.gq',
-    'http://news-page.gq',
-    'https://localhost:8080',
-    'http://localhost:8080',
-    'https://konovaly4.github.io/news-page-frontend.github.io',
-  ],
-  methods: 'GET,HEAD,PUT,PATCH,POST,DELETE',
-  credentials: true,
-}))); */
-
+// CORS middleware applying
 const whitelist = ['http://localhost:8080', 'http://news-page.gq', 'https://news-page.gq'];
 const corsOptions = {
   credentials: true,
@@ -40,6 +28,7 @@ app.options('*', cors(corsOptions), (req, res) => {
 });
 app.use(cors(corsOptions));
 
+// other app use
 app.use(limiter);
 app.use(helmet());
 app.use(cookieParser());

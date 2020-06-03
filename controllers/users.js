@@ -12,7 +12,6 @@ module.exports.getUser = (req, res, next) => {
       email: user.email,
     }))
     .catch((err) => {
-      res.clearCookie('jwt');
       next(err);
     });
 };
