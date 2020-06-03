@@ -22,7 +22,7 @@ const whitelist = [
   'http://localhost:8080',
   'http://news-page.gq',
   'https://news-page.gq',
-  'https://konovaly4.github.io/news-page-frontend.github.io',
+  'https://konovaly4.github.io/news-page-frontend.github.io/',
 ];
 const corsOptions = {
   credentials: true,
